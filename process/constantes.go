@@ -27,7 +27,10 @@ func ReadCSV(datos_route string) []BAModel {
 	for _, line := range csvLines {
 		bm := BAModel{
 			BAID:      line[0],
-			Processed: line[1],
+			Processed: "0",
+		}
+		if len(line) > 1 {
+			bm.Processed = line[1]
 		}
 		listOfBA = append(listOfBA, bm)
 		//fmt.Println(bm.WithID + " " + bm.UserID + " " + bm.WithIdentificationID)
