@@ -1,6 +1,11 @@
 package process
 
-import "sync"
+import (
+	"encoding/csv"
+	"fmt"
+	"os"
+	"sync"
+)
 
 type Job struct {
 	id int
@@ -47,6 +52,7 @@ func createWorkerPool(noOfWorkers int) {
 }
 
 func allocate(ch []BAModel) {
+	fmt.Println(fmt.Sprintf("Tenemos %v datos", len(ch)))
 	for i := 0; i < len(ch); i++ {
 		job := Job{i, ch[i]}
 		jobs <- job
@@ -55,9 +61,15 @@ func allocate(ch []BAModel) {
 	close(jobs)
 }
 
-func result(done chan bool) {
+func result(done chan bool, file *os.File, writer *csv.Writer) {
 	for report := range channOfReport {
+		//fmt.Println(fmt.Sprintf("vamos a escribir: %v", report.BAID))
+		if err := writer.Write([]string{report.BAID, report.Processed}); err != nil {
+			fmt.Println(fmt.Sprintf("error al escribir %v", report.BAID))
+		}
+		writer.Flush()
 		response = append(response, report)
 	}
+	file.Close()
 	done <- true
 }
