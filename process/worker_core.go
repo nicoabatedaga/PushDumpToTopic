@@ -62,6 +62,9 @@ func allocate(ch []BAModel) {
 }
 
 func result(done chan bool, file *os.File, writer *csv.Writer) {
+
+	defer file.Close()
+
 	for report := range channOfReport {
 		//fmt.Println(fmt.Sprintf("vamos a escribir: %v", report.BAID))
 		if err := writer.Write([]string{report.BAID, report.Processed}); err != nil {
@@ -70,6 +73,6 @@ func result(done chan bool, file *os.File, writer *csv.Writer) {
 		writer.Flush()
 		response = append(response, report)
 	}
-	file.Close()
+
 	done <- true
 }
