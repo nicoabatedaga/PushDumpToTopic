@@ -7,7 +7,10 @@ import (
 )
 
 type BAModel struct {
-	BAID      string `json:"ba_id"`
+	BAID      string `json:"id"`
+	Type      string `json:"type"`
+	SiteID    string `json:"site_id"`
+	UserID    string `json:"user_id"`
 	Processed string `json:"processed"`
 }
 
@@ -27,10 +30,13 @@ func ReadCSV(datos_route string) []BAModel {
 	for _, line := range csvLines {
 		bm := BAModel{
 			BAID:      line[0],
+			Type:      line[1],
+			SiteID:    line[2],
+			UserID:    line[3],
 			Processed: "0",
 		}
-		if len(line) > 1 {
-			bm.Processed = line[1]
+		if len(line) > 4 {
+			bm.Processed = line[4]
 		}
 		listOfBA = append(listOfBA, bm)
 		//fmt.Println(bm.WithID + " " + bm.UserID + " " + bm.WithIdentificationID)

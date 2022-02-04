@@ -31,7 +31,7 @@ func openCSV(resultados_route string) (*os.File, *csv.Writer) {
 		fmt.Println(err)
 	}
 	w := csv.NewWriter(csvFile)
-	headers := []string{"ba_id", "processed"}
+	headers := []string{"id", "type", "site_id", "user_id", "processed"}
 	fmt.Println(fmt.Sprintf("vamos a escribir los headers"))
 	if errheader := w.Write(headers); errheader != nil {
 		fmt.Println("error en el write de headers")
@@ -66,7 +66,11 @@ func fillCSV(resultados_route string) {
 func generateReport(bm BAModel) *BAModel {
 	report := BAModel{
 		BAID:      bm.BAID,
+		Type:      bm.Type,
+		SiteID:    bm.SiteID,
+		UserID:    bm.UserID,
 		Processed: bm.Processed,
 	}
+	//api call a BA Y PA
 	return &report
 }
