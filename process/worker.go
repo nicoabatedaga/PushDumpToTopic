@@ -3,6 +3,7 @@ package process
 import (
 	"encoding/csv"
 	"fmt"
+	services "github.com/mercadolibre/PushDumpToTopic/service"
 	"os"
 )
 
@@ -71,6 +72,11 @@ func generateReport(bm BAModel) *BAModel {
 		UserID:    bm.UserID,
 		Processed: bm.Processed,
 	}
-	//api call a BA Y PA
+	if report.Processed != "1" {
+		report.Processed = "0"
+		if err := services.PostMsg(report.BAID, report.Type, report.SiteID, report.UserID); err != nil {
+			report.Processed = "1"
+		}
+	}
 	return &report
 }
