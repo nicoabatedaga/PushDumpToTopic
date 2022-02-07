@@ -18,24 +18,15 @@ func init() {
 	h.Add("X-Auth-Token", "")
 
 	postByMP = rest.RequestBuilder{
-		Timeout:        300 * time.Millisecond,
+		Timeout:        3 * time.Second,
 		ContentType:    rest.JSON,
 		DisableTimeout: false,
 		CustomPool: &rest.CustomPool{
-			MaxIdleConnsPerHost: 100,
+			MaxIdleConnsPerHost: 1000,
 		},
 		RetryStrategy: retry.NewSimpleRetryStrategy(3, 50*time.Millisecond),
-		Headers:       copyMapHeaders(h),
+		Headers:       h,
 	}
-
-}
-
-func copyMapHeaders(originalMap http.Header) http.Header {
-	targetMap := make(http.Header)
-	for key, value := range originalMap {
-		targetMap[key] = value
-	}
-	return targetMap
 }
 
 func NewInternalServerError(msg string) apierrors.ApiError {
@@ -52,7 +43,7 @@ func PostMsg(id, _type, site_id, user_id string) error {
 	//fmt.Println(url)
 	r := RbPostMP(url)
 	if r == nil || r.Response == nil || r.Err != nil || r.StatusCode != http.StatusOK {
-		return NewInternalServerError(fmt.Sprintf("Post fail %s. Unknown Error", id))
+		return NewInternalServerError(fmt.Sprintf("Post fail %s. Unknown Error - %v", id, r.Err))
 	}
 	return nil
 }

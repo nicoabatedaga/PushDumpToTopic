@@ -26,41 +26,21 @@ func Analyze(listOfBA []BAModel, resultados_route string) {
 }
 
 func openCSV(resultados_route string) (*os.File, *csv.Writer) {
-	fmt.Println(fmt.Sprintf("vamos a abrir el archivo"))
+	//fmt.Println(fmt.Sprintf("vamos a abrir el archivo"))
 	csvFile, err := os.Create(resultados_route)
 	if err != nil {
 		fmt.Println(err)
 	}
 	w := csv.NewWriter(csvFile)
-	headers := []string{"id", "type", "site_id", "user_id", "processed"}
-	fmt.Println(fmt.Sprintf("vamos a escribir los headers"))
-	if errheader := w.Write(headers); errheader != nil {
-		fmt.Println("error en el write de headers")
-	}
-	fmt.Println(fmt.Sprintf("retorno file y writer"))
+	/*
+		headers := []string{"id", "type", "site_id", "user_id", "processed"}
+		fmt.Println(fmt.Sprintf("vamos a escribir los headers"))
+		if errheader := w.Write(headers); errheader != nil {
+			fmt.Println("error en el write de headers")
+		}
+	*/
+	//fmt.Println(fmt.Sprintf("retorno file y writer"))
 	return csvFile, w
-}
-
-func fillCSV(resultados_route string) {
-	csvFile, err := os.Create(resultados_route)
-	defer csvFile.Close()
-	if err != nil {
-		fmt.Println(err)
-	}
-	w := csv.NewWriter(csvFile)
-	headers := []string{"ba_id", "processed"}
-	var list [][]string
-	for _, x := range response {
-		list = append(list, []string{x.BAID, x.Processed})
-	}
-	//fmt.Println(list)
-
-	if errheader := w.Write(headers); errheader != nil {
-		fmt.Println("error en el write de headers")
-	}
-	if errlist := w.WriteAll(list); errlist != nil {
-		fmt.Println("error en el write de values")
-	}
 }
 
 // generateReport
@@ -74,8 +54,10 @@ func generateReport(bm BAModel) *BAModel {
 	}
 	if report.Processed != "1" {
 		report.Processed = "0"
-		if err := services.PostMsg(report.BAID, report.Type, report.SiteID, report.UserID); err != nil {
+		if err := services.PostMsg(report.BAID, report.Type, report.SiteID, report.UserID); err == nil {
 			report.Processed = "1"
+		} else {
+			fmt.Println(err.Error())
 		}
 	}
 	return &report
