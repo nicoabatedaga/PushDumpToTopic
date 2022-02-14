@@ -14,13 +14,18 @@ func SplitCsv(route string, sizeOfFile int) {
 	}
 	fmt.Println("Successfully Opened CSV file")
 
-	csvLines, err := csv.NewReader(csvFile).ReadAll()
-	if err != nil {
-		fmt.Println("ERROR:", err)
-	}
+	reader := csv.NewReader(csvFile)
+	//if err != nil {
+	//	fmt.Println("ERROR:", err)
+	//}
 	var listToCSV [][]string
 	i := 0
-	for _, line := range csvLines {
+	numberOfLine := 0
+	line, err := reader.Read()
+	if err != nil {
+		fmt.Println(fmt.Sprintf("ERROR:%v, numero de linea:%v", err, numberOfLine))
+	}
+	for line != nil {
 		listToCSV = append(listToCSV, line)
 		if len(listToCSV) == sizeOfFile {
 			newCsvFile, err := os.Create(fmt.Sprintf("%v.%v.csv", route, i))
@@ -34,6 +39,11 @@ func SplitCsv(route string, sizeOfFile int) {
 			listToCSV = [][]string{}
 			i++
 		}
+		line, err = reader.Read()
+		if err != nil {
+			fmt.Println(fmt.Sprintf("ERROR:%v, numero de linea:%v", err, numberOfLine))
+		}
+		numberOfLine++
 	}
 	if len(listToCSV) > 0 {
 		newCsvFile, err := os.Create(fmt.Sprintf("%v.%v.csv", route, i))
