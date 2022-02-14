@@ -39,7 +39,6 @@ func ReadCSV(datos_route string) []BAModel {
 			bm.Processed = line[4]
 		}
 		listOfBA = append(listOfBA, bm)
-		//fmt.Println(bm.WithID + " " + bm.UserID + " " + bm.WithIdentificationID)
 	}
 	return listOfBA
 }

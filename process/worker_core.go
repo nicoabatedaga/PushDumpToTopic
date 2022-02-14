@@ -12,7 +12,6 @@ type Job struct {
 	BA BAModel
 }
 
-//Armo las variables para los workers
 var channOfReport chan BAModel
 var jobs chan Job
 var results chan BAModel
@@ -34,8 +33,6 @@ func initializeWorkersData() {
 func worker(wg *sync.WaitGroup) {
 	for job := range jobs {
 		output := generateReport(job.BA)
-		//fmt.Println(fmt.Sprintf("Job: %v - Output para el generate report: %#v", job.id, *output))
-		//fmt.Println("job terminado:", job.id)
 		channOfReport <- *output
 	}
 	wg.Done()
@@ -52,12 +49,10 @@ func createWorkerPool(noOfWorkers int) {
 }
 
 func allocate(ch []BAModel) {
-	//fmt.Println(fmt.Sprintf("Tenemos %v datos", len(ch)))
 	for i := 0; i < len(ch); i++ {
 		job := Job{i, ch[i]}
 		jobs <- job
 	}
-	//el canal de job esta cargado completo
 	close(jobs)
 }
 
@@ -66,7 +61,6 @@ func result(done chan bool, file *os.File, writer *csv.Writer) {
 	defer file.Close()
 
 	for report := range channOfReport {
-		//fmt.Println(fmt.Sprintf("vamos a escribir: %v", report.BAID))
 		if err := writer.Write([]string{report.BAID, report.Type, report.SiteID, report.UserID, report.Processed}); err != nil {
 			fmt.Println(fmt.Sprintf("error al escribir %v", report.BAID))
 		}

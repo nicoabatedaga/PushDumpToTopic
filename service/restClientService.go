@@ -40,7 +40,6 @@ var RbPostMP = func(url string) *rest.Response {
 
 func PostMsg(id, _type, site_id, user_id string) error {
 	url := fmt.Sprintf("https://beta-topic-news-generator_transfer-consumers.furyapps.io/transfer_consumers/ba_producer/id/%v/type/%v/site/%v/user/%v", id, _type, site_id, user_id)
-	//fmt.Println(url)
 	r := RbPostMP(url)
 	if r == nil || r.Response == nil || r.Err != nil || r.StatusCode != http.StatusOK {
 		return NewInternalServerError(fmt.Sprintf("Post fail %s. Unknown Error - %v", id, r.Err))
