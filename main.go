@@ -6,11 +6,12 @@ import (
 	"github.com/mercadolibre/PushDumpToTopic/csv"
 	"github.com/mercadolibre/PushDumpToTopic/process"
 	"os"
+	"strings"
 	"time"
 )
 
 func main() {
-	splitCSV()
+	processCSV()
 }
 
 func splitCSV() {
@@ -34,7 +35,8 @@ func processCSV() {
 	fmt.Print("ruta complea del archivo de datos: ")
 	scanner.Scan()
 	datos_route = scanner.Text()
-	resultados_route = datos_route + ".resultados.csv"
+	baseResultado := strings.Replace(datos_route, ".csv", "", -1)
+	resultados_route = baseResultado + ".resultados.csv"
 	listOfBugs := process.ReadCSV(datos_route)
 	ts := time.Now()
 	fmt.Println(fmt.Sprintf("Time start %v", ts))
