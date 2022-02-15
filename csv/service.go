@@ -3,6 +3,8 @@ package csv
 import (
 	"encoding/csv"
 	"fmt"
+	"github.com/mercadolibre/PushDumpToTopic/process"
+	"io"
 	"os"
 	"strings"
 )
@@ -59,5 +61,45 @@ func SplitCsv(route string, sizeOfFile int) {
 		listToCSV = [][]string{}
 		i++
 	}
+
+}
+
+func AnalizeResponse(route string) {
+	csvFile, err := os.Open(route)
+	defer csvFile.Close()
+	if err != nil {
+		fmt.Println(err)
+	}
+	fmt.Println("Successfully Opened CSV file")
+
+	reader := csv.NewReader(csvFile)
+	listOfBA := []process.BAModel{}
+	numberOfLine := 0
+	countOfError := 0
+	line, err := reader.Read()
+	if err != nil {
+		fmt.Println(fmt.Sprintf("ERROR:%v, numero de linea:%v", err, numberOfLine))
+	}
+	for line != nil {
+		bm := process.BAModel{
+			BAID:      line[0],
+			Type:      line[1],
+			SiteID:    line[2],
+			UserID:    line[3],
+			Processed: line[4],
+		}
+		listOfBA = append(listOfBA, bm)
+		if bm.Processed == "0" {
+			countOfError++
+			fmt.Println(fmt.Sprintf("ERROR line:%v - BA.id:%v", numberOfLine, bm.BAID))
+		}
+		line, err = reader.Read()
+		if err != nil && err != io.EOF {
+			fmt.Println(fmt.Sprintf("ERROR:%v, numero de linea:%v", err, numberOfLine))
+		}
+		numberOfLine++
+	}
+
+	fmt.Println(fmt.Sprintf("Cantidad de errores en el file: %v", countOfError))
 
 }

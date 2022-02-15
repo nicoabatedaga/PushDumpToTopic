@@ -20,7 +20,7 @@ var response []BAModel
 const (
 	sizeChnReport = 200
 	sizeChnJob    = 200
-	cantOfWorkers = 10
+	cantOfWorkers = 1
 )
 
 func initializeWorkersData() {
