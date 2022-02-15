@@ -4,6 +4,7 @@ import (
 	"encoding/csv"
 	"fmt"
 	"os"
+	"strings"
 )
 
 func SplitCsv(route string, sizeOfFile int) {
@@ -19,6 +20,7 @@ func SplitCsv(route string, sizeOfFile int) {
 	//	fmt.Println("ERROR:", err)
 	//}
 	var listToCSV [][]string
+	baseSalida := strings.Replace(route, ".csv", "", -1)
 	i := 0
 	numberOfLine := 0
 	line, err := reader.Read()
@@ -28,7 +30,7 @@ func SplitCsv(route string, sizeOfFile int) {
 	for line != nil {
 		listToCSV = append(listToCSV, line)
 		if len(listToCSV) == sizeOfFile {
-			newCsvFile, err := os.Create(fmt.Sprintf("%v.%v.csv", route, i))
+			newCsvFile, err := os.Create(fmt.Sprintf("%v%v.csv", baseSalida, i))
 			if err != nil {
 				fmt.Println(err)
 			}
@@ -46,7 +48,7 @@ func SplitCsv(route string, sizeOfFile int) {
 		numberOfLine++
 	}
 	if len(listToCSV) > 0 {
-		newCsvFile, err := os.Create(fmt.Sprintf("%v.%v.csv", route, i))
+		newCsvFile, err := os.Create(fmt.Sprintf("%v%v.csv", baseSalida, i))
 		if err != nil {
 			fmt.Println(err)
 		}

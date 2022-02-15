@@ -21,7 +21,7 @@ func splitCSV() {
 	datos_route = scanner.Text()
 	ts := time.Now()
 	fmt.Println(fmt.Sprintf("Time start %v", ts))
-	csv.SplitCsv(datos_route, 10000000)
+	csv.SplitCsv(datos_route, 5000000)
 	te := time.Now()
 	fmt.Println(fmt.Sprintf("Time end %v", te))
 	fmt.Println(fmt.Sprintf("Total time %v", te.Sub(ts).Seconds()))
