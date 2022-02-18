@@ -103,3 +103,29 @@ func AnalizeResponse(route string) {
 	fmt.Println(fmt.Sprintf("Cantidad de errores en el file: %v", countOfError))
 
 }
+
+func MergeCSV(incompleto, base []process.BAModel, resultado_route string) {
+	newCsvFile, err := os.Create(resultado_route)
+	if err != nil {
+		fmt.Println(err)
+	}
+	writer := csv.NewWriter(newCsvFile)
+	var mapOfIdsIncompleted map[string]process.BAModel = make(map[string]process.BAModel)
+	for _, incompletoItem := range incompleto {
+		if err := writer.Write([]string{incompletoItem.BAID, incompletoItem.Type, incompletoItem.SiteID, incompletoItem.UserID, incompletoItem.Processed}); err != nil {
+			fmt.Println(fmt.Sprintf("error al escribir %v", incompletoItem.BAID))
+		} else {
+			mapOfIdsIncompleted[incompletoItem.BAID] = incompletoItem
+		}
+		writer.Flush()
+	}
+	for _, baseItem := range base {
+		if _, ok := mapOfIdsIncompleted[baseItem.BAID]; !ok {
+			if err := writer.Write([]string{baseItem.BAID, baseItem.Type, baseItem.SiteID, baseItem.UserID, baseItem.Processed}); err != nil {
+				fmt.Println(fmt.Sprintf("error al escribir %v", baseItem.BAID))
+			}
+		}
+		writer.Flush()
+	}
+	newCsvFile.Close()
+}

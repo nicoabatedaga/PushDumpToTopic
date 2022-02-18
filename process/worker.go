@@ -16,7 +16,7 @@ func Analyze(listOfBA []BAModel, resultados_route string) {
 	go allocate(listOfBA)
 	done := make(chan bool)
 	go result(done, file, writer)
-	createWorkerPool(cantOfWorkers)
+	createWorkerPool(cantOfWorkers, done)
 
 	<-done //Todos los datos procesados
 
@@ -47,7 +47,7 @@ func generateReport(bm BAModel) *BAModel {
 		if err := services.PostMsg(report.BAID, report.Type, report.SiteID, report.UserID); err == nil {
 			report.Processed = "1"
 		} else {
-			fmt.Println(err.Error())
+			//fmt.Println(err.Error())
 		}
 	}
 	return &report

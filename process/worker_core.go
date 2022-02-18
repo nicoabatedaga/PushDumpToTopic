@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"os"
 	"sync"
+	"time"
 )
 
 type Job struct {
@@ -18,9 +19,10 @@ var results chan BAModel
 var response []BAModel
 
 const (
-	sizeChnReport = 200
-	sizeChnJob    = 200
-	cantOfWorkers = 1
+	sizeChnReport = 400
+	sizeChnJob    = 400
+	cantOfWorkers = 300
+	timeToScaling = 75
 )
 
 func initializeWorkersData() {
@@ -38,11 +40,17 @@ func worker(wg *sync.WaitGroup) {
 	wg.Done()
 }
 
-func createWorkerPool(noOfWorkers int) {
+func createWorkerPool(noOfWorkers int, done chan bool) {
 	var wg sync.WaitGroup
 	for i := 0; i < noOfWorkers; i++ {
+		if len(done) > 0 {
+			fmt.Println("termino procesado, dejo de crear workers")
+			break
+		}
+		fmt.Println(fmt.Sprintf("Largo el worker:%v, time:%v", i, time.Now().Format(time.RFC3339Nano)))
 		wg.Add(1)
 		go worker(&wg)
+		time.Sleep(time.Duration(int(time.Millisecond*timeToScaling) * i))
 	}
 	wg.Wait()
 	close(channOfReport)
