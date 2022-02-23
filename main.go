@@ -51,13 +51,20 @@ func processCSV() {
 	datos_route = scanner.Text()
 	baseResultado := strings.Replace(datos_route, ".csv", "", -1)
 	resultados_route = baseResultado + ".resultados.csv"
-	listOfBugs := process.ReadCSV(datos_route)
 	ts := time.Now()
 	fmt.Println(fmt.Sprintf("Time start %v", ts))
-	process.Analyze(listOfBugs, resultados_route)
+	processFiles(datos_route, resultados_route)
+	csv.AnalizeResponse(resultados_route)
+	fmt.Println("resultados_route:", resultados_route)
 	te := time.Now()
 	fmt.Println(fmt.Sprintf("Time end %v", te))
 	fmt.Println(fmt.Sprintf("Total time %v", te.Sub(ts).Seconds()))
+}
+
+func processFiles(datos_route, resultados_route string) int {
+	listOfBugs := process.ReadCSV(datos_route)
+	process.Analyze(listOfBugs, resultados_route)
+	return csv.AnalizeResponse(resultados_route)
 }
 
 func mergeCSV() {

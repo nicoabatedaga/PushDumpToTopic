@@ -64,7 +64,7 @@ func SplitCsv(route string, sizeOfFile int) {
 
 }
 
-func AnalizeResponse(route string) {
+func AnalizeResponse(route string) int {
 	csvFile, err := os.Open(route)
 	defer csvFile.Close()
 	if err != nil {
@@ -91,17 +91,18 @@ func AnalizeResponse(route string) {
 		listOfBA = append(listOfBA, bm)
 		if bm.Processed == "0" {
 			countOfError++
-			fmt.Println(fmt.Sprintf("ERROR line:%v - BA.id:%v", numberOfLine, bm.BAID))
+			//fmt.Println(fmt.Sprintf("ERROR line:%v - BA.id:%v", numberOfLine, bm.BAID))
 		}
 		line, err = reader.Read()
 		if err != nil && err != io.EOF {
-			fmt.Println(fmt.Sprintf("ERROR:%v, numero de linea:%v", err, numberOfLine))
+			//fmt.Println(fmt.Sprintf("ERROR:%v, numero de linea:%v", err, numberOfLine))
 		}
 		numberOfLine++
 	}
 
 	fmt.Println(fmt.Sprintf("Cantidad de errores en el file: %v", countOfError))
 
+	return countOfError
 }
 
 func MergeCSV(incompleto, base []process.BAModel, resultado_route string) {

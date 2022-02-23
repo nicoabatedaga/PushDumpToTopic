@@ -16,7 +16,7 @@ func Analyze(listOfBA []BAModel, resultados_route string) {
 	go allocate(listOfBA)
 	done := make(chan bool)
 	go result(done, file, writer)
-	createWorkerPool(cantOfWorkers, done)
+	createWorkerPool(cantOfWorkers)
 
 	<-done //Todos los datos procesados
 

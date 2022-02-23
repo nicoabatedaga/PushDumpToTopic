@@ -18,14 +18,14 @@ func init() {
 	h.Add("X-Auth-Token", "")
 
 	postByMP = rest.RequestBuilder{
-		Timeout:        30 * time.Second,
+		Headers:        h,
+		Timeout:        3 * time.Second,
 		ContentType:    rest.JSON,
 		DisableTimeout: false,
 		CustomPool: &rest.CustomPool{
-			MaxIdleConnsPerHost: 1000,
+			MaxIdleConnsPerHost: 5000,
 		},
 		RetryStrategy: retry.NewSimpleRetryStrategy(3, 200*time.Millisecond),
-		Headers:       h,
 	}
 }
 
