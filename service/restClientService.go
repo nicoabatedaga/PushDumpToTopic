@@ -1,15 +1,6 @@
 package services
 
-import (
-	"fmt"
-	"github.com/mercadolibre/go-meli-toolkit/goutils/apierrors"
-	"github.com/mercadolibre/go-meli-toolkit/restful/rest/retry"
-	"net/http"
-	"time"
-
-	"github.com/mercadolibre/go-meli-toolkit/restful/rest"
-)
-
+/*
 var postByMP rest.RequestBuilder
 
 func init() {
@@ -46,3 +37,4 @@ func PostMsg(id, _type, site_id, user_id string) error {
 	}
 	return nil
 }
+*/

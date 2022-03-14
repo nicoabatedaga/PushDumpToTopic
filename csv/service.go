@@ -3,7 +3,7 @@ package csv
 import (
 	"encoding/csv"
 	"fmt"
-	"github.com/mercadolibre/PushDumpToTopic/process"
+	"github.com/nicoabatedaga/PushDumpToTopic/process"
 	"io"
 	"os"
 	"strings"

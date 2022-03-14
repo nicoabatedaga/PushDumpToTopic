@@ -3,7 +3,6 @@ package process
 import (
 	"encoding/csv"
 	"fmt"
-	services "github.com/mercadolibre/PushDumpToTopic/service"
 	"os"
 )
 
@@ -44,11 +43,11 @@ func generateReport(bm BAModel) *BAModel {
 	}
 	if report.Processed != "1" {
 		report.Processed = "0"
-		if err := services.PostMsg(report.BAID, report.Type, report.SiteID, report.UserID); err == nil {
+		/*if err := services.PostMsg(report.BAID, report.Type, report.SiteID, report.UserID); err == nil {
 			report.Processed = "1"
 		} else {
 			//fmt.Println(err.Error())
-		}
+		}*/
 	}
 	return &report
 }

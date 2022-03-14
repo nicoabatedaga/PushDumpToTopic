@@ -3,8 +3,8 @@ package main
 import (
 	"bufio"
 	"fmt"
-	"github.com/mercadolibre/PushDumpToTopic/csv"
-	"github.com/mercadolibre/PushDumpToTopic/process"
+	"github.com/nicoabatedaga/PushDumpToTopic/csv"
+	"github.com/nicoabatedaga/PushDumpToTopic/process"
 	"os"
 	"strings"
 	"time"
