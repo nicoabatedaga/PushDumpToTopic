@@ -19,7 +19,7 @@ func SplitCsv(route string, sizeOfFile int) {
 
 	reader := csv.NewReader(csvFile)
 	//if err != nil {
-	//	fmt.Println("ERROR:", err)
+	//	fmt.Println("ERROR:", err) //nico
 	//}
 	var listToCSV [][]string
 	baseSalida := strings.Replace(route, ".csv", "", -1)
